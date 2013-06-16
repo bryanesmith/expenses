@@ -1,2 +1,9 @@
 # Personal data for seeding the database
 private/data.sql
+
+# My configuration
+private/expenses.ini
+
+# Any gedit backups
+*~
+
