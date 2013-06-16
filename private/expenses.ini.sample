@@ -1,0 +1,4 @@
+mysql_host     = localhost
+mysql_dbname   = expenses
+mysql_user     = expenses
+mysql_password = mysecretpassword
