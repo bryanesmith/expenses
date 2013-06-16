@@ -113,6 +113,12 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - -  
+  function respond_not_found() {
+    http_response_code(404);
+    exit;
+  } 
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - -  
   function respond_bad_request() {
     http_response_code(400);
     exit;
@@ -123,6 +129,13 @@
     http_response_code(501);
     exit;
   } 
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  function respond_json( $json ) {
+    header('Content-Type: application/json');
+    print $json;
+    exit;
+  }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   $_req_resource = NULL;
@@ -135,7 +148,7 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  function handle_get_json( $sql, $args ) {
+  function handle_list_json( $sql, $args ) {
     $dbh = get_dbh();
 
     $sth = $dbh->prepare( $sql );
@@ -143,17 +156,38 @@
     $sth->execute($args);
 
     $json = json_encode( $sth->fetchAll() );
-   
-    // Write payload and exit 
-    header('Content-Type: application/json');
-    print $json;
-    exit;
+    respond_json( $json );
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_get_json( $sql, $args ) {
+    $dbh = get_dbh();
+
+    $sth = $dbh->prepare( $sql );
+    $sth->setFetchMode(PDO::FETCH_ASSOC);  
+    $sth->execute($args);
+
+    $result = $sth->fetch();
+
+    if ( $result ) {
+      $json = json_encode( $result );
+      respond_json( $json );
+    } else {
+      respond_not_found();
+    }
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_list_expenses() {
     $sql = "SELECT * FROM `expenses`";
     $args = array();
+    handle_list_json( $sql, $args ); 
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_get_expense( $id ) {
+    $sql = "SELECT * FROM `expenses` WHERE `id` = ?";
+    $args = array( $id );
     handle_get_json( $sql, $args ); 
   }
 
@@ -161,23 +195,37 @@
   function handle_list_categories() {
     $sql = "SELECT * FROM `categories`";
     $args = array();
+    handle_list_json( $sql, $args ); 
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_get_category( $id ) {
+    $sql = "SELECT * FROM `categories` WHERE `id` = ?";
+    $args = array( $id );
     handle_get_json( $sql, $args ); 
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_request( $resource, $method ) { 
     $type = $resource[0];
+    $count = count( $resource );
     switch ( $method ) {
       case "POST":
           respond_not_implemented();
           break;
       case "GET":
           if ( $type == 'expenses' ) {
-            handle_list_expenses();
+            if ( $count == 1 ) {
+              handle_list_expenses();
+            } else if ( $count == 2 ) {
+              handle_get_expense( $resource[1] );
+            }
           } else if ( $type == 'categories' ) {     
-            handle_list_categories();
-          } else {
-            die( "Programmer error, shouldn't get here" );
+            if ( $count == 1 ) {
+              handle_list_categories();
+            } else if ( $count == 2 ) {
+              handle_get_category( $resource[1] );
+            }
           }
           break;
       case "PUT":
@@ -194,8 +242,8 @@
   $resource = get_req_resource();
 
   # CHECK: Should have 1 or 2 parts
-  $parts = count( $resource );
-  switch ( $parts ) {
+  $count = count( $resource );
+  switch ( $count ) {
 
     case 1: # nothing
       break;
