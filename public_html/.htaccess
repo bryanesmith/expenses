@@ -1,0 +1,9 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# If using 'path' query variable (which works for GET, POST, PUT, DELETE):
+RewriteRule ^api/(.*)$ api.php?path=$1 [L]
+
+# If using $_SERVER['PATH_INFO']:
+#RewriteRule ^api/(.*)$ index.php/$1 [L]
