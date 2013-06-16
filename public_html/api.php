@@ -1,20 +1,59 @@
 <?php
 
+  require 'config.php';
+
   /*
-   * Provides RESTful interface for finances. See .htaccess for rewrite.
+   * Provides RESTful interface for finances. See .htaccess for rewrite rules.
    *
    * Developed and tested on PHP 4.3 and 4.4.
    *
    * Created: June 15 2013
-   *
    */
+  
+  // If add additional resource, add to this array.
   $types = array( 'expenses', 'categories' );
 
-  #define( "PATH"  , $_SERVER["PATH_INFO"] );
+  // Constants for this request
   define( "PATH"  , $_GET["path"] );
   define( "METHOD", $_SERVER["REQUEST_METHOD"] );
+  
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  $_config = NULL;
+  function get_config() {
+    global $_config;
+    if ( ! isset( $_config ) ) {
+      $_config = parse_ini_file( CONFIG_PATH );
+    }
 
-  // Polyfill: http://www.php.net/manual/en/function.http-response-code.php#107261
+    return $_config;
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  $_dbh = NULL;
+  function get_dbh() {
+
+    global $_dbh;
+
+    if ( ! isset( $_dbh ) ) {
+
+      $config = get_config();
+
+      $host   = $config[ 'mysql_host' ];
+      $dbname = $config[ 'mysql_dbname' ];
+      $user   = $config[ 'mysql_user' ];
+      $pass   = $config[ 'mysql_password' ];
+
+      $str = "mysql:host=${host};dbname=${dbname}";
+      $_dbh = new PDO( $str, $user, $pass );
+
+    }
+
+    return $_dbh;
+  }
+   
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  // Polyfill for http_response_code (for PHP 4.3)
+  // Source: http://www.php.net/manual/en/function.http-response-code.php#107261
   if (!function_exists('http_response_code')) {
     function http_response_code($code = NULL) {
       if ($code !== NULL) {
@@ -86,18 +125,60 @@
   } 
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  $_req_resource = NULL;
   function get_req_resource() {
-    return explode( '/', ltrim( PATH, '/' ) );
+    global $_req_resource;
+    if ( ! isset( $_req_resource ) ) {
+      $_req_resource = explode( '/', trim( PATH, '/' ) );
+    }
+    return $_req_resource;
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  function handle_request() { 
-    switch ( METHOD ) {
+  function handle_get_json( $sql, $args ) {
+    $dbh = get_dbh();
+
+    $sth = $dbh->prepare( $sql );
+    $sth->setFetchMode(PDO::FETCH_ASSOC);  
+    $sth->execute($args);
+
+    $json = json_encode( $sth->fetchAll() );
+   
+    // Write payload and exit 
+    header('Content-Type: application/json');
+    print $json;
+    exit;
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_list_expenses() {
+    $sql = "SELECT * FROM `expenses`";
+    $args = array();
+    handle_get_json( $sql, $args ); 
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_list_categories() {
+    $sql = "SELECT * FROM `categories`";
+    $args = array();
+    handle_get_json( $sql, $args ); 
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_request( $resource, $method ) { 
+    $type = $resource[0];
+    switch ( $method ) {
       case "POST":
           respond_not_implemented();
           break;
       case "GET":
-          respond_not_implemented();
+          if ( $type == 'expenses' ) {
+            handle_list_expenses();
+          } else if ( $type == 'categories' ) {     
+            handle_list_categories();
+          } else {
+            die( "Programmer error, shouldn't get here" );
+          }
           break;
       case "PUT":
           respond_not_implemented();
@@ -109,6 +190,7 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  // Go!
   $resource = get_req_resource();
 
   # CHECK: Should have 1 or 2 parts
@@ -136,5 +218,5 @@
     respond_bad_request(); 
   }
 
-  handle_request();
+  handle_request( $resource, METHOD );
 ?>
