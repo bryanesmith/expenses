@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Expenses</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script>
+      // Source: http://stackoverflow.com/a/13052187
+      $(document).ready( function() {
+        $('#inputDate').val( new Date().toJSON().slice(0,10) );
+      });
+    </script>
+  </head>
+  <body>
+    <div class="hero-unit">
+      <h1>Expenses</h1>
+    </div>
+    <div class="container-fluid">
+      <div class="row-fluid">
+
+        <!--Sidebar content-->
+        <div class="span4">
+          <form class="form-horizontal">
+            <fieldset>
+              <div class="control-group">
+                <label class="control-label" for="inputDate">Date</label>
+                <div class="controls">
+                  <input type="date" id="inputDate">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="selectCategory">Category</label>
+                <div class="controls">
+                  <select id="selectCategory"></select>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="inputDescription">Description</label>
+                <div class="controls">
+                  <textarea id="inputDescription"></textarea>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="inputPrice">Price</label>
+                <div class="controls">
+                  <input type="text" id="inputPrice" placeholder="price">
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="controls">
+                  <button type="submit" class="btn btn-primary" type="button">Add expense</button>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+    
+        <!--Body content-->
+        <div class="span8">
+          <table class="table table-striped">
+            <tr>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Price</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
