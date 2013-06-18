@@ -238,33 +238,41 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  // Go!
-  $resource = get_req_resource();
+  function verify_request() {
+    global $types;
 
-  # CHECK: Should have 1 or 2 parts
-  $count = count( $resource );
-  switch ( $count ) {
+    $resource = get_req_resource();
 
-    case 1: # nothing
-      break;
+    # CHECK: Should have 1 or 2 parts
+    $count = count( $resource );
+    switch ( $count ) {
 
-    # CHECK: If second argument, must be numeric
-    case 2:
-      $id = $resource[1];
-      if (! is_numeric( $id ) ) {
+      case 1: # nothing
+        break;
+
+      # CHECK: If second argument, must be numeric
+      case 2:
+        $id = $resource[1];
+        if (! is_numeric( $id ) ) {
+          respond_bad_request();
+        }
+        break;
+
+      default:
         respond_bad_request();
-      }
-      break;
+    }
 
-    default:
-      respond_bad_request();
-  }
+    # CHECK: Recognized part
+    $type = $resource[0];
+    if ( ! in_array( $type, $types ) ) {
+      respond_bad_request(); 
+    }
 
-  # CHECK: Recognized part
-  $type = $resource[0];
-  if ( ! in_array( $type, $types ) ) {
-    respond_bad_request(); 
-  }
+  } # verify_request
 
-  handle_request( $resource, METHOD );
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  // Go!
+  verify_request();
+  handle_request( get_req_resource(), METHOD );
+
 ?>
