@@ -1,3 +1,16 @@
+// Source: http://stackoverflow.com/a/6982840
+function getCurrentDate() {
+  var now = new Date();
+  var month = (now.getMonth() + 1);               
+  var day = now.getDate();
+  if(month < 10) 
+      month = "0" + month;
+  if(day < 10) 
+      day = "0" + day;
+  return now.getFullYear() + '-' + month + '-' + day;
+}
+
+// Service
 angular.module('expensesApp.service',['ngResource']).
   factory('Expenses', function($resource){
       return $resource('/api/expenses', {},{
@@ -29,7 +42,8 @@ var ExpensesController = function($scope, $http, Expenses, Categories) {
   };
   $scope.init = function() {
     $scope.expense = {};
-    var date = new Date().toJSON().slice(0,10);
+    //var date = new Date().toJSON().slice(0,10);
+    var date = getCurrentDate();
     $scope.expense.date = date;
   };
 };
