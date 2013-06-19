@@ -9,14 +9,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-resource.min.js"></script>
     <script src="js/expensesApp.js"></script>
-    <script>
-      // Source: http://stackoverflow.com/a/13052187
-      $(document).ready( function() {
-        $('#inputDate').val( new Date().toJSON().slice(0,10) );
-      });
-    </script>
+    <script></script>
   </head>
-  <body data-ng-controller="ExpensesController">
+  <body data-ng-controller="ExpensesController" data-ng-init="init()">
     <div class="hero-unit">
       <h1>Expenses</h1>
       <!-- for debugging -->
@@ -27,18 +22,18 @@
 
         <!--Sidebar content-->
         <div class="span4">
-          <form class="form-horizontal">
+          <form class="form-horizontal" data-ng-submit="addExpense()">
             <fieldset>
               <div class="control-group">
                 <label class="control-label" for="inputDate">Date</label>
                 <div class="controls">
-                  <input type="date" id="inputDate">
+                  <input type="date" id="inputDate" data-ng-model="expense.date">
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label" for="selectCategory">Category</label>
                 <div class="controls">
-                  <select id="selectCategory">
+                  <select id="selectCategory" data-ng-model="expense.category_id">
                     <option data-ng-repeat="category in categoriesData | orderBy: 'category'" value="{{category.id}}">{{category.category}}</option>
                   </select>
                 </div>
@@ -46,18 +41,18 @@
               <div class="control-group">
                 <label class="control-label" for="inputDescription">Description</label>
                 <div class="controls">
-                  <textarea id="inputDescription"></textarea>
+                  <textarea id="inputDescription" data-ng-model="expense.description"></textarea>
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label" for="inputPrice">Price</label>
                 <div class="controls">
-                  <input type="text" id="inputPrice" placeholder="price">
+                  <input type="text" id="inputPrice" placeholder="price" data-ng-model="expense.cost">
                 </div>
               </div>
               <div class="control-group">
                 <div class="controls">
-                  <button type="submit" class="btn btn-primary" type="button">Add expense</button>
+                  <button type="submit" class="btn btn-primary" type="button" data-ng-disabled="!(expense.category_id && expense.description && expense.cost)">Add expense</button>
                 </div>
               </div>
             </fieldset>

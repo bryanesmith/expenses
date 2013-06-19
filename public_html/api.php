@@ -186,9 +186,13 @@
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_post_json( $sql, $args, $resource ) {
 
-    $dbh = get_dbh();
-    $sth = $dbh->prepare( $sql );
-    $sth->execute($args);
+    try {    
+      $dbh = get_dbh();
+      $sth = $dbh->prepare( $sql );
+      $sth->execute($args);
+    } catch ( Exception $e ) {
+      respond_bad_request();
+    }
 
     // For response, retrieve newly-created resource
     $resource['id'] = $dbh->lastInsertId(); 
@@ -225,12 +229,25 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  // Source: http://www.nolte-schamm.za.net/2011/05/php-var_dump-into-error-log/
+  function var_dump_stderr( $var ) {
+    ob_start();
+    var_dump($var);
+    $contents = ob_get_contents();
+    ob_end_clean();
+    error_log($contents);
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_post_expense() {
 
     $expense = get_json_decoded_request_payload(); 
 
+    // DEBUG:
+    var_dump_stderr( $expense );
+
     $sql = "INSERT INTO `expenses`(`date`, `description`, `cost`, `category_id`) VALUES (?, ?, ?, ?)";
-    $args = array( $expense['date'], $expense['description'], $expense['cost'], $expense['category_id'] );
+    $args = array( $expense['date'] . ' 00:00:00', $expense['description'], $expense['cost'], $expense['category_id'] );
 
     handle_post_json( $sql, $args, $expense );
   }
