@@ -1,3 +1,3 @@
 // Main module
-angular.module('expensesApp',['expensesApp.service']);
+angular.module('expensesApp',['expensesApp.expensesService', 'expensesApp.categoriesService']);
 
