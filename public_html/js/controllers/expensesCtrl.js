@@ -19,6 +19,11 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
     $scope.init(); 
   }
 
+  //
+  $scope.timeAgo = function(datetime) {
+    return moment(datetime, "YYYY-MM-DD hh:mm:ss").calendar();
+  }
+
   // 
   $scope.getExpense = function(id) {
 
