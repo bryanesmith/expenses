@@ -28,12 +28,14 @@ RESTful expense-tracking web application using AngularJS and PHP.
 
 3. Copy `private/expenses.ini.sample` to `private/expenses.ini`, and update to include the correct database host, database name, database username, database password.
 
-4. Copy the above configuration file `expenses.ini` to a private (non-web accessible) directory on your web host, and update the path to the configuration at `config.php`:
+4. Copy the above configuration file `expenses.ini` to a private (non-web accessible) directory on your web host, and update the path to the configuration at `includes/config.inc.php`:
         
         <?php
           // CHANGE: The path to the configuration file
           define( "CONFIG_PATH", "../path/to/expenses.ini" ); 
         ?>
+
+*Note*: if the value for `CONFIG_PATH` is relative, it should be relative to `api.php`, not `includes/config.inc.php`.
 
 5. Place the contents of `public_html` in any web-accessible directory. (Does not need to be the root of the web directory.)
 
