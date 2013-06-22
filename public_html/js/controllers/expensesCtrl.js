@@ -19,6 +19,21 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
     $scope.init(); 
   }
 
+  // 
+  $scope.getExpense = function(id) {
+    console.dir( $scope.categoriesData );
+
+    for ( var i = 0; i < $scope.categoriesData.length; i++ ) {
+      var category = $scope.categoriesData[i];
+
+      if ( category['id'] === id ) {
+        return category['category'];
+      }
+    }
+
+    return '(unknown)';
+  }
+
   //
   $scope.addExpense = function() {
     ExpensesService.addExpense($scope.expense, addExpenseCallback);

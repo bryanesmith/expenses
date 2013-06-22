@@ -76,7 +76,7 @@
 
             <tr data-ng-repeat="expense in expensesData | orderBy: 'date':true">
               <td>{{expense.date}}</td>
-              <td>{{expense.category_id}}</td>
+              <td>{{getExpense( expense.category_id )}}</td>
               <td>{{expense.description}}</td>
               <td>{{expense.cost}}</td>
             </tr>
