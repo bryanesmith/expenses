@@ -21,7 +21,6 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
 
   // 
   $scope.getExpense = function(id) {
-    console.dir( $scope.categoriesData );
 
     for ( var i = 0; i < $scope.categoriesData.length; i++ ) {
       var category = $scope.categoriesData[i];
