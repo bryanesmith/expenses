@@ -35,7 +35,7 @@ RESTful expense-tracking web application using AngularJS and PHP.
           define( "CONFIG_PATH", "../path/to/expenses.ini" ); 
         ?>
 
-*Note*: if the value for `CONFIG_PATH` is relative, it should be relative to `api.php`, not `includes/config.inc.php`.
+  *Note*: if the value for `CONFIG_PATH` is relative, it should be relative to `api.php`, not `includes/config.inc.php`.
 
 5. Place the contents of `public_html` in any web-accessible directory. (Does not need to be the root of the web directory.)
 
