@@ -12,6 +12,8 @@ RESTful expense-tracking web application using AngularJS and PHP.
 
 *Note*: auth is not provided, so you will need to select an authentication method. An easy option is [Apache password basic auth](http://wiki.apache.org/httpd/PasswordBasicAuth).
 
+*Tip*: if you use Apache password basic auth, note that you (or a tool you use, such as cPanel) will likely modify `.htaccess`, which also contains essential rewrite rules. After setting basic auth, you will want to remove write permissions for `.htaccess` (e.g., `chmod a-w .htaccess`) in your development and production environments to avoid clobbering your rewrite and authentication rules while transferring files back and forth.
+
 1. Create a MySQL database and user for this application, and note the database name, username and password. (User must at least have read and write permissions, though the code below grants all privileges.):
 
         mysql> CREATE DATABASE `expenses`;
