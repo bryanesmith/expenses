@@ -31,6 +31,9 @@
       .input-prepend input {
         width: 180px;
       }
+      td.action {
+        min-width: 3em;
+      }
     </style>
   </head>
   <body data-ng-controller="ExpensesController" data-ng-init="init()">
@@ -38,6 +41,14 @@
       <h1>Expenses</h1>
     </div>
     <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span12">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#home" data-toggle="tab">Expenses</a></li>
+            <li><a href="#profile" data-toggle="tab">Categories</a></li>
+          </ul>
+        </div>
+      </div>
       <div class="row-fluid">
 
         <!--Sidebar content-->
@@ -80,16 +91,16 @@
               </div>
             </fieldset>
           </form>
-        </div>
+        </div> <!-- .row3 -->
     
         <!--Body content-->
-        <div class="span9">
+        <div class="span6">
           <table class="table table-striped">
             <tr>
               <th>Date</th>
               <th>Category</th>
               <th>Description</th>
-              <th>Price</th>
+              <th colspan="2">Price</th>
             </tr>
 
             <tr data-ng-repeat="expense in expensesData | orderBy: 'date':true">
@@ -97,10 +108,23 @@
               <td>{{getExpense( expense.category_id )}}</td>
               <td>{{expense.description}}</td>
               <td>${{expense.cost}}</td>
+              <td class="action"><i class="icon-edit"></i> <i class="icon-remove"></i></td>
             </tr>
           </table>
-        </div>
-      </div>
-    </div>
+        </div> <!-- .span6 -->
+
+        <div class="span3">
+          <div class="well">
+            [chart, last 7 days]
+          </div>
+          <div class="well">
+            [chart, last 5 weeks]
+          </div>
+          <div class="well">
+            [chart, last 6 months]
+          </div>
+        </div> <!-- .span3 -->
+      </div> <!-- .row-fluid -->
+    </div> <!-- .container-fluid -->
   </body>
 </html>
