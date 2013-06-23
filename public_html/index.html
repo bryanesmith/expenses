@@ -3,9 +3,10 @@
   <head>
     <title>Expenses</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="lib/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+    <!--<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+    <script src="lib/jquery-ui-1.10.3.custom/js/jquery-1.9.1.js"></script>
+    <script src="lib/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-resource.min.js"></script>
     <script src="lib/moment.min.js"></script>
@@ -15,6 +16,9 @@
     <script src="js/services/expensesService.js"></script>
     <script src="js/services/categoriesService.js"></script>
     <script src="js/apps/expensesApp.js"></script>
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="lib/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+    <link href="lib/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" media="screen">
     <style>
       .hero-unit {
         text-align: right;
@@ -27,11 +31,6 @@
       .input-prepend input {
         width: 180px;
       }
-      /*
-      .row-fluid .controls input, .row-fluid .controls select,  .row-fluid .controls textarea {
-        width: 100%;
-      }
-      */
     </style>
   </head>
   <body data-ng-controller="ExpensesController" data-ng-init="init()">
@@ -48,7 +47,7 @@
               <div class="control-group">
                 <label class="control-label" for="inputDate">Date</label>
                 <div class="controls">
-                  <input class="span12" type="date" id="inputDate" data-ng-model="expense.date">
+                  <input class="span12" type="text" id="inputDate" data-ng-model="expense.date">
                 </div>
               </div>
               <div class="control-group">

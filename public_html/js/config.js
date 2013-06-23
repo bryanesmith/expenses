@@ -12,4 +12,6 @@ moment.lang('en', {
   }
 });
 
-
+$(function() {
+  $( "#inputDate" ).datepicker();
+});
