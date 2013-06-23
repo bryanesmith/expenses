@@ -37,6 +37,8 @@ RESTful expense-tracking web application using AngularJS and PHP.
 
   *Note*: if the value for `CONFIG_PATH` is relative, it should be relative to `api.php`, not `includes/config.inc.php`.
 
+  *Tip*: after setting the configuration in this file, remove write permissions for this file (e.g., `chmod a-w includes/config.inc.php`) in your development and production environments to avoid clobbering your settings while transferring files back and forth.
+
 5. Place the contents of `public_html` in any web-accessible directory. (Does not need to be the root of the web directory.)
 
 
