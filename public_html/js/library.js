@@ -10,3 +10,9 @@ function getCurrentDate() {
   return now.getFullYear() + '-' + month + '-' + day;
 }
 
+//
+function notImplemented() {
+  alert("Not implemented"); 
+  return false;
+}
+
