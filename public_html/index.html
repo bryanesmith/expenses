@@ -22,7 +22,16 @@
       }
       .hero-unit h1 {
         font-size: 1.75em;
+        margin: 10px;
       }
+      .input-prepend input {
+        width: 180px;
+      }
+      /*
+      .row-fluid .controls input, .row-fluid .controls select,  .row-fluid .controls textarea {
+        width: 100%;
+      }
+      */
     </style>
   </head>
   <body data-ng-controller="ExpensesController" data-ng-init="init()">
@@ -33,19 +42,19 @@
       <div class="row-fluid">
 
         <!--Sidebar content-->
-        <div class="span4">
-          <form class="form-horizontal" data-ng-submit="addExpense()">
+        <div class="span3">
+          <form class="" data-ng-submit="addExpense()">
             <fieldset>
               <div class="control-group">
                 <label class="control-label" for="inputDate">Date</label>
                 <div class="controls">
-                  <input type="date" id="inputDate" data-ng-model="expense.date">
+                  <input class="span12" type="date" id="inputDate" data-ng-model="expense.date">
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label" for="selectCategory">Category</label>
                 <div class="controls">
-                  <select id="selectCategory" data-ng-model="expense.category_id">
+                  <select class="span12" id="selectCategory" data-ng-model="expense.category_id">
                     <option data-ng-repeat="category in categoriesData | orderBy: 'category'" value="{{category.id}}">{{category.category}}</option>
                   </select>
                 </div>
@@ -53,13 +62,16 @@
               <div class="control-group">
                 <label class="control-label" for="inputDescription">Description</label>
                 <div class="controls">
-                  <textarea id="inputDescription" data-ng-model="expense.description"></textarea>
+                  <textarea class="span12" id="inputDescription" data-ng-model="expense.description"></textarea>
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label" for="inputPrice">Price</label>
                 <div class="controls">
-                  <input type="text" id="inputPrice" placeholder="price" data-ng-model="expense.cost">
+                  <div class="input-prepend">
+                    <span class="add-on">$</span>
+                    <input type="text" id="inputPrice" placeholder="price" data-ng-model="expense.cost">
+                  </div>
                 </div>
               </div>
               <div class="control-group">
@@ -72,7 +84,7 @@
         </div>
     
         <!--Body content-->
-        <div class="span8">
+        <div class="span9">
           <table class="table table-striped">
             <tr>
               <th>Date</th>
@@ -85,7 +97,7 @@
               <td>{{timeAgo( expense.date )}}</td>
               <td>{{getExpense( expense.category_id )}}</td>
               <td>{{expense.description}}</td>
-              <td>{{expense.cost}}</td>
+              <td>${{expense.cost}}</td>
             </tr>
           </table>
         </div>
