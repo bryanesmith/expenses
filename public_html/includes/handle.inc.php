@@ -80,15 +80,27 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function convertToMySqlDate( $dateStr ) {
+    // Convert MM/DD/YYYY -> YYYY-MM-DD 0000:00:00
+    $parts = preg_split("/\//", $dateStr );
+    if ( count($parts) != 3 ) {
+      respond_bad_request();
+    }
+
+    return $parts[2] . '-' . $parts[0] . '-' . $parts[1] . ' 0000:00:00';
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_post_expense() {
 
     $expense = get_json_decoded_request_payload(); 
 
     // DEBUG:
-    var_dump_stderr( $expense );
+    $date = convertToMySqlDate($expense['date']);
+    var_dump_stderr( $expense['date'] . ' -> ' . $date );
 
     $sql = "INSERT INTO `expenses`(`date`, `description`, `cost`, `category_id`) VALUES (?, ?, ?, ?)";
-    $args = array( $expense['date'] . ' 00:00:00', $expense['description'], $expense['cost'], $expense['category_id'] );
+    $args = array( $date , $expense['description'], $expense['cost'], $expense['category_id'] );
 
     handle_post_json( $sql, $args, $expense );
   }

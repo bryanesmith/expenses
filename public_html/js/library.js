@@ -7,7 +7,8 @@ function getCurrentDate() {
       month = "0" + month;
   if(day < 10) 
       day = "0" + day;
-  return now.getFullYear() + '-' + month + '-' + day;
+  //return now.getFullYear() + '-' + month + '-' + day;
+  return month + '/' + day + '/' + now.getFullYear();
 }
 
 //

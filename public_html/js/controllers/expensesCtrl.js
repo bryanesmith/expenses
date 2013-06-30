@@ -16,7 +16,7 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
 
   // 
   function addExpenseCallback(response) {
-    $scope.init(); 
+    $scope.reset(); 
   }
 
   //
@@ -43,19 +43,38 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
     ExpensesService.addExpense($scope.expense, addExpenseCallback);
   };
 
-  //
-  $scope.init = function() {
+  $scope.setDate = function(date) {
+    console.log("DEBUG: setting date to " + date);
+    $scope.expense.date = date;
+  }
+
+  // 
+  $scope.reset = function() {
     $scope.expense = {};
 
     // Set data
     var date = getCurrentDate();
-    $scope.expense.date = date;
+    $scope.setDate( date );
 
     // Get expenses
     ExpensesService.getExpenses(getExpensesCallback); 
 
     // Get categories
     CategoriesService.getCategories(getCategoriesCallback);
+  }
+
+  //
+  $scope.init = function() {
+
+    $(function() {
+      $( "#inputDate" ).datepicker({
+        onSelect: function(date) {
+          $scope.setDate( date );
+        }
+      });
+    });
+
+    $scope.reset();
   };
 };
 
