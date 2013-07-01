@@ -4,22 +4,68 @@
     <title>Expenses</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+    <!-- Vendor JS -->
     <script src="lib/jquery-ui-1.10.3.custom/js/jquery-1.9.1.js"></script>
     <script src="lib/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-resource.min.js"></script>
     <script src="lib/moment.min.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/d3/d3.min.js"></script> 
+    <script src="lib/d3/d3.layout.min.js"></script> 
+    <script src="lib/rickshaw/rickshaw.min.js"></script>
+
+    <!-- App JS -->
     <script src="js/config.js"></script>
     <script src="js/library.js"></script>
     <script src="js/controllers/expensesCtrl.js"></script>
     <script src="js/services/expensesService.js"></script>
     <script src="js/services/categoriesService.js"></script>
     <script src="js/apps/expensesApp.js"></script>
+    <script>
+      $(window).load(function() {
+        var graph = new Rickshaw.Graph( {
+	        element: document.querySelector("#daily-expense-chart"),
+	        renderer: 'bar',
+          padding: { top: .05 },
+	        series: [{
+		        data: [ { x: 0, y: 40 }, { x: 1, y: 55 }, { x: 2, y: 42  },  { x: 3, y:50  },  { x: 4, y: 39 },  { x: 5, y: 41 },  { x: 6, y: 34 } ],
+		        color: 'steelblue'
+	        }, {
+		        data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 22 },  { x: 3, y: 12 },  { x: 4, y: 22 },  { x: 5, y: 23 },  { x: 6, y: 17 } ],
+		        color: 'lightblue'
+	        }, {
+		        data: [ { x: 0, y: 10 }, { x: 1, y: 9 }, { x: 2, y: 9 },  { x: 3, y: 8 },  { x: 4, y: 14 },  { x: 5, y: 15 },  { x: 6, y: 2 } ],
+		        color: 'GreenYellow'
+	        }, {
+		        data: [ { x: 0, y: 12 }, { x: 1, y: 12 }, { x: 2, y: 13 },  { x: 3, y: 13 },  { x: 4, y: 12 },  { x: 5, y: 8 },  { x: 6, y: 7 } ],
+		        color: 'SlateGray'
+	        }, {
+		        data: [ { x: 0, y: 5 }, { x: 1, y: 6 }, { x: 2, y: 6 },  { x: 3, y: 7 },  { x: 4, y: 5 },  { x: 5, y: 6 },  { x: 6, y: 6 } ],
+		        color: 'violet'
+	        }
+
+          ]
+        });
+
+        var yAxis = new Rickshaw.Graph.Axis.Y({
+            graph: graph,
+            tickFormat: Rickshaw.Fixtures.Number.formatKMBT
+        });
+
+        yAxis.render();
+
+        graph.render();
+      });
+    </script>
+
+    <!-- Vendor CSS -->
     <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="lib/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
     <link href="lib/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" media="screen">
+    <link href="lib/rickshaw/rickshaw.min.css" rel="stylesheet" media="screen">
+
+    <!-- App CSS -->
     <style>
       .hero-unit {
         text-align: right;
@@ -41,8 +87,9 @@
         line-height: 30px;
       }
       .chart {
-        min-height: 100px;
+        min-height: 150px;
         margin-bottom: 0;
+        overflow: show;
       }
       .accordion-heading {
         background-color: #eee;
@@ -150,8 +197,8 @@
               </div><!-- .accordion-heading -->
               <div id="daily-expense-summary-body" class="accordion-body collapse in">
                 <div class="accordion-inner">
-                  <div class="chart well">
-                    [chart, last 7 days]
+                  <div class="chart well" id="daily-expense-chart">
+                    
                   </div>
                 </div>
               </div><!-- .accordion-body -->
