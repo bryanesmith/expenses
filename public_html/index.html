@@ -30,23 +30,26 @@
           padding: { top: .05 },
 	        series: [{
 		        data: [ { x: 0, y: 40 }, { x: 1, y: 55 }, { x: 2, y: 42  },  { x: 3, y:50  },  { x: 4, y: 39 },  { x: 5, y: 41 },  { x: 6, y: 34 } ],
-		        color: 'steelblue'
+		        color: 'SlateGrey',
+            name: 'Rent and utiltities'
 	        }, {
 		        data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 22 },  { x: 3, y: 12 },  { x: 4, y: 22 },  { x: 5, y: 23 },  { x: 6, y: 17 } ],
-		        color: 'lightblue'
-	        }, {
-		        data: [ { x: 0, y: 10 }, { x: 1, y: 9 }, { x: 2, y: 9 },  { x: 3, y: 8 },  { x: 4, y: 14 },  { x: 5, y: 15 },  { x: 6, y: 2 } ],
-		        color: 'GreenYellow'
+		        color: 'steelblue',
+            name: 'Groceries'
 	        }, {
 		        data: [ { x: 0, y: 12 }, { x: 1, y: 12 }, { x: 2, y: 13 },  { x: 3, y: 13 },  { x: 4, y: 12 },  { x: 5, y: 8 },  { x: 6, y: 7 } ],
-		        color: 'SlateGray'
+		        color: 'DarkSeaGreen',
+            name: 'Household'
 	        }, {
-		        data: [ { x: 0, y: 5 }, { x: 1, y: 6 }, { x: 2, y: 6 },  { x: 3, y: 7 },  { x: 4, y: 5 },  { x: 5, y: 6 },  { x: 6, y: 6 } ],
-		        color: 'violet'
+		        data: [ { x: 0, y: 25 }, { x: 1, y: 16 }, { x: 2, y: 36 },  { x: 3, y: 47 },  { x: 4, y: 25 },  { x: 5, y: 16 },  { x: 6, y: 36 } ],
+		        color: 'lightblue',
+            name: 'Other'
 	        }
 
           ]
         });
+
+        graph.render();
 
         var yAxis = new Rickshaw.Graph.Axis.Y({
             graph: graph,
@@ -55,7 +58,11 @@
 
         yAxis.render();
 
-        graph.render();
+        var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+            graph: graph,
+            //xFormatter: function(x) { return x + "seconds" },
+            yFormatter: function(y) { return "$" + y }
+        } );
       });
     </script>
 
@@ -197,9 +204,7 @@
               </div><!-- .accordion-heading -->
               <div id="daily-expense-summary-body" class="accordion-body collapse in">
                 <div class="accordion-inner">
-                  <div class="chart well" id="daily-expense-chart">
-                    
-                  </div>
+                  <div class="chart well" id="daily-expense-chart"></div>
                 </div>
               </div><!-- .accordion-body -->
             </div> <!-- .accordion-group -->
