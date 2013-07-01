@@ -25,7 +25,7 @@
     <script>
       $(window).load(function() {
         var graph = new Rickshaw.Graph( {
-	        element: document.querySelector("#daily-expense-chart"),
+	        element: document.querySelector("#daily-expense-chart .chart-container"),
 	        renderer: 'bar',
           padding: { top: .05 },
 	        series: [{
@@ -60,7 +60,7 @@
 
         var hoverDetail = new Rickshaw.Graph.HoverDetail( {
             graph: graph,
-            //xFormatter: function(x) { return x + "seconds" },
+            //xFormatter: function(x) {  },
             yFormatter: function(y) { return "$" + y }
         } );
       });
@@ -94,9 +94,10 @@
         line-height: 30px;
       }
       .chart {
-        min-height: 150px;
         margin-bottom: 0;
-        overflow: show;
+      }
+      .chart-container {
+        min-height: 150px;
       }
       .accordion-heading {
         background-color: #eee;
@@ -204,7 +205,7 @@
               </div><!-- .accordion-heading -->
               <div id="daily-expense-summary-body" class="accordion-body collapse in">
                 <div class="accordion-inner">
-                  <div class="chart well" id="daily-expense-chart"></div>
+                  <div class="chart well" id="daily-expense-chart"><div class="chart-container"></div></div>
                 </div>
               </div><!-- .accordion-body -->
             </div> <!-- .accordion-group -->
