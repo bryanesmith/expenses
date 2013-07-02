@@ -117,6 +117,23 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_get_daily_summary() {
+    $sql = "SELECT sum(e.cost) as cost, c.category FROM `expenses` as e, `categories` as c WHERE e.category_id = c.id AND e.date >= DATE_ADD(CURDATE(), INTERVAL -7 DAY) GROUP BY c.id";
+    $args = array();
+    handle_list_json( $sql, $args ); 
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_get_summary( $type ) {
+    switch ( $type ) {
+      case 'daily':
+        handle_get_daily_summary();
+        break;
+      default:
+        respond_bad_request();
+    }
+  }
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_get_request( $resource ) {
     $type = $resource[0];
     $count = count( $resource );
@@ -135,6 +152,9 @@
             handle_get_category( $resource[1] );
           }
           break;
+      case 'summaries':
+        handle_get_summary( $resource[1] ); 
+        break; 
     }
   } // handle_get_request
 
@@ -178,6 +198,5 @@
           break;
     }
   }
-
 
 ?>

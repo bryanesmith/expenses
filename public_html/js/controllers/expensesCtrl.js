@@ -1,5 +1,5 @@
 // Controller
-var ExpensesController = function($scope, $http, ExpensesService, CategoriesService) {
+var ExpensesController = function($scope, $http, ExpensesService, CategoriesService, SummariesService) {
 
   $scope.expensesData   = {};
   $scope.categoriesData = {};
@@ -44,7 +44,6 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
   };
 
   $scope.setDate = function(date) {
-    console.log("DEBUG: setting date to " + date);
     $scope.expense.date = date;
   }
 
@@ -66,15 +65,15 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
   //
   $scope.init = function() {
 
-    $(function() {
-      $( "#inputDate" ).datepicker({
-        onSelect: function(date) {
-          $scope.setDate( date );
-        }
-      });
+    $scope.reset();
+
+    // Load vendor via config.js
+    $(window).load(function() {
+      rickshawInit();
+      momentJsInit();
+      datepickerInit( $scope.setDate );
     });
 
-    $scope.reset();
   };
 };
 

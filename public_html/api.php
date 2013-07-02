@@ -13,7 +13,7 @@
    */
   
   // If add additional resource, add to this array.
-  $types = array( 'expenses', 'categories' );
+  $types = array( 'expenses', 'categories', 'summaries' );
   
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   // Go!

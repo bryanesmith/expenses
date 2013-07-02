@@ -98,6 +98,8 @@
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function get_req_path() {
+    var_dump_stderr("DEBUG");
+    var_dump_stderr( $_GET );
     return $_GET["path"];
   }
 
@@ -127,10 +129,11 @@
 
       # CHECK: If second argument, must be numeric
       case 2:
-        $id = $resource[1];
-        if (! is_numeric( $id ) ) {
-          respond_bad_request();
-        }
+        # NOTE: /summaries/daily violates this check
+#        $id = $resource[1];
+#        if (! is_numeric( $id ) ) {
+#          respond_bad_request();
+#        }
         break;
 
       default:
