@@ -193,7 +193,7 @@
     $categories = get_categories();
     foreach ( $categories as $category ) {
       // Get summary of costs
-      $sql = "SELECT sum(cost) as cost, date FROM `expenses` WHERE category_id = ? AND date >= DATE_ADD(CURDATE(), INTERVAL -7 DAY)";
+      $sql = "SELECT sum(cost) as cost, date FROM `expenses` WHERE category_id = ? AND date >= DATE_ADD(CURDATE(), INTERVAL -6 DAY)";
       $args = array($category['id']);
       $price = fetch( $sql, $args );
       $total_cost = isset($price['cost']) ? $price['cost'] : "0";
