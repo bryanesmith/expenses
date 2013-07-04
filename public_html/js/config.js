@@ -49,11 +49,22 @@ function prepareDailySummaryCategories(origCategories) {
     for (var i=0; i<3; i++) {
       _categories.push(categories.shift()); 
     }
-    var otherCost = 0;
+    var otherTotalCost = 0;
+    var otherDailyCosts = new Array();
     for ( var i=0; i<categories.length; i++ ) {
-      otherCost += categories[i].totalCost; 
+      var cat = categories[i];
+      otherTotalCost += cat.totalCost; 
+      for ( var j=0; j<cat.dailyCosts.length; j++ ) {
+        var dailyExpense = cat.dailyCosts[j];
+        var otherDailyExpense = otherDailyCosts[j]; 
+        if ( !otherDailyExpense ) {
+          otherDailyExpense = { date: dailyExpense.date, cost: 0 };
+          otherDailyCosts[j] = otherDailyExpense;
+        }
+        otherDailyExpense.cost += dailyExpense.cost;
+      }
     }
-    _categories.push({ cost: otherCost, category: 'Other' });
+    _categories.push({ totalCost: otherTotalCost, dailyCosts: otherDailyCosts, category: 'Other' });
     categories = _categories;
   }
 
