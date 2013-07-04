@@ -62,7 +62,7 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
     CategoriesService.getCategories(getCategoriesCallback);
 
     // Get daily summaries
-    SummariesService.getDailySummaries(handleDailyExpenses);
+    SummariesService.getDailySummaries(DailyGraph.update);
   }
 
   //
