@@ -5,25 +5,14 @@
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_list_json( $sql, $args ) {
-    $dbh = get_dbh();
-
-    $sth = $dbh->prepare( $sql );
-    $sth->setFetchMode(PDO::FETCH_ASSOC);  
-    $sth->execute($args);
-
-    $json = json_encode( $sth->fetchAll() );
+    $json = json_encode( fetchAll( $sql, $args ) );
     respond_json( $json );
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_get_json( $sql, $args ) {
-    $dbh = get_dbh();
 
-    $sth = $dbh->prepare( $sql );
-    $sth->setFetchMode(PDO::FETCH_ASSOC);  
-    $sth->execute($args);
-
-    $result = $sth->fetch();
+    $result = fetch( $sql, $args );
 
     if ( $result ) {
       $json = json_encode( $result );
@@ -117,10 +106,117 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function _sth( $sql, $args ) {
+    $dbh = get_dbh();
+
+    $sth = $dbh->prepare( $sql );
+    $sth->setFetchMode(PDO::FETCH_ASSOC);  
+    $sth->execute($args);
+
+    return $sth;
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function fetch( $sql, $args = array() ) {
+    return _sth($sql, $args)->fetch();
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function fetchAll( $sql, $args = array() ) {
+    return _sth($sql, $args)->fetchAll();
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function get_categories() {
+    $sql = "SELECT * FROM `categories`";
+    return fetchAll( $sql );
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function get_seven_previous_days() {
+    $days = array();
+    $timestamp = time();
+    for ($i = 0 ; $i < 7 ; $i++) {
+      array_push( $days, date('Y-m-d', $timestamp) );
+      $timestamp -= 24 * 3600; 
+    } 
+    return $days;
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function compareDailyCostTimes( $a, $b ) {
+    $aD = $a['date'];
+    $bD = $b['date'];
+    if ( $aD == $bD ) {
+      return 0;
+    }
+
+    return $aD < $bD ? -1 : 1;
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function fillEmptyDailyCosts( $dailyCosts ) {
+    // Step 1: Timestamps are keys, booleans are value.
+    $timestamps = array();
+    foreach( get_seven_previous_days() as $day ) {
+      $timestamp = $day . ' 00:00:00';
+      $timestamps[ $timestamp ] = false; 
+    }
+
+    // Step 2: find timestamps with values
+    foreach ( $dailyCosts as $dailyCost ) {
+      $timestamps[ $dailyCost['date'] ] = true;
+    }
+
+    var_dump_stderr( $timestamps );
+
+    // Step 3: for any timestamps not found, add 0
+    foreach ( $timestamps as $timestamp => $found ) {
+      if ( ! $found ) {
+        $dailyCost = array( 'cost' => '0', 'date' => $timestamp ); 
+        array_push( $dailyCosts, $dailyCost );
+      }
+    }
+
+    // Step 4: Sort, oldest first
+    usort( $dailyCosts, "compareDailyCostTimes" );
+
+    return $dailyCosts;
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_get_daily_summary() {
-    $sql = "SELECT sum(e.cost) as cost, c.category FROM `expenses` as e, `categories` as c WHERE e.category_id = c.id AND e.date >= DATE_ADD(CURDATE(), INTERVAL -7 DAY) GROUP BY c.id";
-    $args = array();
-    handle_list_json( $sql, $args ); 
+    // TODO: For each category, get:
+    //   - Total cost (for convenient comparison client-side)
+    //   - Daily cost
+    $summaries = array();
+    $categories = get_categories();
+    foreach ( $categories as $category ) {
+      // Get summary of costs
+      $sql = "SELECT sum(cost) as cost, date FROM `expenses` WHERE category_id = ? AND date >= DATE_ADD(CURDATE(), INTERVAL -7 DAY)";
+      $args = array($category['id']);
+      $price = fetch( $sql, $args );
+      $total_cost = isset($price['cost']) ? $price['cost'] : "0";
+
+      // Get daily costs
+      $sql .= " GROUP BY date";
+      $dailyCosts = fetchAll( $sql, $args );
+
+      $summary = array( 
+        'id' => $category['id'], 
+        'category' => $category['category'],
+        'totalCost' => $total_cost, 
+        'dailyCosts' => fillEmptyDailyCosts( $dailyCosts ) );
+
+      array_push( $summaries, $summary );
+    }
+
+    $json = json_encode( $summaries );
+    respond_json( $json );
+
+//    $sql = "SELECT sum(e.cost) as cost, c.category, e.date FROM `expenses` as e, `categories` as c WHERE e.category_id = c.id AND e.date >= DATE_ADD(CURDATE(), INTERVAL -7 DAY) GROUP BY c.id, e.date ORDER BY e.date DESC";
+//    $args = array();
+//    handle_list_json( $sql, $args ); 
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 

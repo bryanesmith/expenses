@@ -60,6 +60,9 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
 
     // Get categories
     CategoriesService.getCategories(getCategoriesCallback);
+
+    // Get daily summaries
+    SummariesService.getDailySummaries(handleDailyExpenses);
   }
 
   //
@@ -69,7 +72,6 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
 
     // Load vendor via config.js
     $(window).load(function() {
-      rickshawInit();
       momentJsInit();
       datepickerInit( $scope.setDate );
     });
