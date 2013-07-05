@@ -1,0 +1,132 @@
+<!--Sidebar content-->
+<div class="span3" data-ng-init="init()">
+  <div class="accordion" id="add-expense-accordion">
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#add-expense-accordion" href="#add-expense-accordion-body">Add expense</a>
+      </div> <!-- .accordion-heading -->
+      <div id="add-expense-accordion-body" class="accordion-body collapse in">
+        <div class="accordion-inner">
+          <form data-ng-submit="addExpense()">
+            <fieldset>
+              <div class="control-group">
+                <label class="control-label" for="inputDate">Date</label>
+                <div class="controls">
+                  <input class="span12" type="text" id="inputDate" data-ng-model="expense.date">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="selectCategory">Category</label>
+                <div class="controls">
+                  <select class="span12" id="selectCategory" data-ng-model="expense.category_id">
+                    <option data-ng-repeat="category in categoriesData | orderBy: 'category'" value="{{category.id}}">{{category.category}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="inputDescription">Description</label>
+                <div class="controls">
+                  <textarea class="span12" id="inputDescription" data-ng-model="expense.description"></textarea>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="inputPrice">Price</label>
+                <div class="controls">
+                  <div class="input-prepend">
+                    <span class="add-on">$</span>
+                    <input type="text" id="inputPrice" placeholder="price" data-ng-model="expense.cost">
+                  </div>
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="controls">
+                  <button type="submit" class="btn btn-primary" type="button" data-ng-disabled="!(expense.category_id && expense.description && expense.cost)">Add expense</button>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div><!-- .accordion-inner -->
+      </div> <!-- .accordion-body#add-expense-accordion-body -->
+    </div> <!-- .accordion-group -->
+  </div> <!-- .accordion -->
+</div> <!-- .row3 -->
+
+<!--Body content-->
+<div class="span6">
+  <table class="table table-striped">
+    <tr>
+      <th>Date</th>
+      <th>Category</th>
+      <th>Description</th>
+      <th colspan="2">Price</th>
+    </tr>
+
+    <tr data-ng-repeat="expense in expensesData | orderBy: 'date':true">
+      <td>{{timeAgo( expense.date )}}</td>
+      <td>{{getExpense( expense.category_id )}}</td>
+      <td>{{expense.description}}</td>
+      <td>${{expense.cost}}</td>
+      <td class="action"><a href="#" onclick="return Library.notImplemented()"><i class="icon-edit" data-toggle="tooltip" title="Edit this expense"></i></a> <a href="#" onclick="return Library.notImplemented()"><i class="icon-remove" data-toggle="tooltip" title="Delete this expense"></i></a></td>
+    </tr>
+  </table>
+</div> <!-- .span6 -->
+
+<div class="span3">
+  <div class="accordion" id="expense-summaries-accordion">
+    <!-- / / / / / / / / / / / / / / / -->
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#expense-summaries-accordion" href="#daily-expense-summary-body">Daily expense summary</a>
+      </div><!-- .accordion-heading -->
+      <div id="daily-expense-summary-body" class="accordion-body collapse in">
+        <div class="accordion-inner">
+          <div class="chart well" id="daily-expense-chart"><div class="chart-container"></div></div>
+        </div>
+      </div><!-- .accordion-body -->
+    </div> <!-- .accordion-group -->
+
+    <!-- / / / / / / / / / / / / / / / -->
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#expense-summaries-accordion" href="#weekly-expense-summary-body">Weekly expense summary</a>
+      </div><!-- .accordion-heading -->
+      <div id="weekly-expense-summary-body" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <div class="chart well">
+            [chart, last 5 weeks]
+          </div>
+        </div>
+      </div><!-- .accordion-body -->
+    </div> <!-- .accordion-group -->
+    
+    <!-- / / / / / / / / / / / / / / / -->
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#expense-summaries-accordion" href="#monthly-expense-summary-body">Monthly expense summary</a>
+      </div><!-- .accordion-heading -->
+      <div id="monthly-expense-summary-body" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <div class="chart well">
+            [chart, last 6 months]
+          </div>
+        </div>
+      </div><!-- .accordion-body -->
+    </div> <!-- .accordion-group -->
+
+    <!-- / / / / / / / / / / / / / / / -->
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#expense-summaries-accordion" href="#annual-expense-summary-body">Annual expense summary</a>
+      </div><!-- .accordion-heading -->
+      <div id="annual-expense-summary-body" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <div class="chart well">
+            [chart, last 6 years]
+          </div>
+        </div>
+      </div><!-- .accordion-body -->
+    </div> <!-- .accordion-group -->
+
+  </div><!-- .accordion -->
+</div> <!-- .span3 -->
+

@@ -1,5 +1,5 @@
 // Controller
-var ExpensesController = function($scope, $http, ExpensesService, CategoriesService, SummariesService) {
+var ExpensesController = function($scope, $http, $window, ExpensesService, CategoriesService, SummariesService) {
 
   $scope.expensesData   = {};
   $scope.categoriesData = {};
@@ -61,8 +61,10 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
     // Get categories
     CategoriesService.getCategories(getCategoriesCallback);
 
-    // Get daily summaries
-    SummariesService.getDailySummaries(DailyGraph.update);
+    $scope.$on('$viewContentLoaded', function(){
+      // Get daily summaries
+      SummariesService.getDailySummaries(DailyGraph.update);
+    });
   }
 
   //
@@ -70,7 +72,7 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
 
     $scope.reset();
 
-    $(window).load(function() {
+    $scope.$on('$viewContentLoaded', function(){
       Init.run({ datepickerCallback: $scope.setDate });
     });
 
