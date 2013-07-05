@@ -70,10 +70,9 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
 
     $scope.reset();
 
-    // Load vendor via config.js
     $(window).load(function() {
-      momentJsInit();
-      datepickerInit( $scope.setDate );
+      Init.momentJS();
+      Init.datepicker( $scope.setDate );
     });
 
   };
