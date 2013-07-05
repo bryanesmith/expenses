@@ -1,5 +1,7 @@
 var Init = function() {
 
+  var datepickerCallback = function(){};
+
   /*
    * Moment.js - http://momentjs.com/
    */
@@ -19,18 +21,39 @@ var Init = function() {
   /**
    * JQuery UI Datepicker - 
    */
-  function datepicker( callback ) {
+  function datepicker() {
     $( "#inputDate" ).datepicker({
       onSelect: function(date) {
-        callback( date );
+        datepickerCallback( date );
       }
     });
   }
 
+  /**
+   * Loads user-specified options.
+   */
+  function loadOptions( options ) {
+    if ( options.hasOwnProperty('datepickerCallback') ) {
+      datepickerCallback = options.datepickerCallback;
+    }
+  }
+
+  /**
+   * Initialize everything. Accepts object argument with the following properties:
+   *  - datepickerCallback: callback that accepts date whenever datepicker is selected by user.
+   */
+  function run(options) {
+
+    loadOptions( options ); 
+
+    // Run initializations here
+    datepicker();
+    momentJS();
+  }
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   return {
-    datepicker: datepicker,
-    momentJS: momentJS
+    run: run 
   };
 
 }(); // Init module

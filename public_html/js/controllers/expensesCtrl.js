@@ -71,8 +71,7 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
     $scope.reset();
 
     $(window).load(function() {
-      Init.momentJS();
-      Init.datepicker( $scope.setDate );
+      Init.run({ datepickerCallback: $scope.setDate });
     });
 
   };
