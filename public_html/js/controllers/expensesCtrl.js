@@ -52,7 +52,7 @@ var ExpensesController = function($scope, $http, ExpensesService, CategoriesServ
     $scope.expense = {};
 
     // Set data
-    var date = getCurrentDate();
+    var date = Library.getCurrentDate();
     $scope.setDate( date );
 
     // Get expenses
