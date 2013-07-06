@@ -34,6 +34,11 @@ var DailyGraph = function() {
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function clear() {
+    graph = false;
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function initGraph(categories) {
     if ( ! graph ) {
       graph = createGraph( categories );
@@ -191,6 +196,7 @@ var DailyGraph = function() {
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
   return {
+    clear: clear,
     update: update  
   };
 

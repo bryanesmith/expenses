@@ -74,6 +74,7 @@ var ExpensesController = function($scope, $http, $window, ExpensesService, Categ
 
     $scope.$on('$viewContentLoaded', function(){
       Init.run({ datepickerCallback: $scope.setDate });
+      DailyGraph.clear();
     });
 
   };
