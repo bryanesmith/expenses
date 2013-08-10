@@ -49,6 +49,7 @@ var ExpensesController = function($scope, $http, $window, ExpensesService, Categ
 
   // 
   $scope.reset = function() {
+
     $scope.expense = {};
 
     // Set data
@@ -61,33 +62,15 @@ var ExpensesController = function($scope, $http, $window, ExpensesService, Categ
     // Get categories
     CategoriesService.getCategories(getCategoriesCallback);
 
-    // 
-    // TODO: This is wrong for two reasons:
-    //
-    //    1. Re-registering event handler for $viewContentLoaded
-    //       each time reset() is called
-    //
-    //    2. This event is not happening every time addExpense(...)
-    //       is called.
-    //
-    // 
-    //
-    $scope.$on('$viewContentLoaded', function(){
-      // Get daily summaries
-      SummariesService.getDailySummaries(DailyGraph.update);
-    });
+    // Get daily summaries
+    SummariesService.getDailySummaries(DailyGraph.update);
   }
 
   //
   $scope.init = function() {
-
+    Init.run({ datepickerCallback: $scope.setDate });
+    DailyGraph.clear(); // Reset DailyGraph so that it can be redrawn
     $scope.reset();
-
-    $scope.$on('$viewContentLoaded', function(){
-      Init.run({ datepickerCallback: $scope.setDate });
-      DailyGraph.clear(); // Reset DailyGraph so that it can be redrawn
-    });
-
   };
 };
 
