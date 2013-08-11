@@ -84,10 +84,7 @@
 
     $expense = get_json_decoded_request_payload(); 
 
-    // DEBUG:
     $date = convertToMySqlDate($expense['date']);
-    var_dump_stderr( $expense['date'] . ' -> ' . $date );
-
     $sql = "INSERT INTO `expenses`(`date`, `description`, `cost`, `category_id`) VALUES (?, ?, ?, ?)";
     $args = array( $date , $expense['description'], $expense['cost'], $expense['category_id'] );
 
@@ -168,8 +165,6 @@
       $timestamps[ $dailyCost['date'] ] = true;
     }
 
-    var_dump_stderr( $timestamps );
-
     // Step 3: for any timestamps not found, add 0
     foreach ( $timestamps as $timestamp => $found ) {
       if ( ! $found ) {
@@ -234,6 +229,7 @@
     $type = $resource[0];
     $count = count( $resource );
     switch ( $type ) {
+
       case 'expenses':
           if ( $count == 1 ) {
             handle_list_expenses();
@@ -241,6 +237,7 @@
             handle_get_expense( $resource[1] );
           }
           break;
+
       case 'categories':
           if ( $count == 1 ) {
             handle_list_categories();
@@ -248,9 +245,14 @@
             handle_get_category( $resource[1] );
           }
           break;
+
       case 'summaries':
         handle_get_summary( $resource[1] ); 
         break; 
+
+      default:
+        respond_bad_request();
+
     }
   } // handle_get_request
 
@@ -266,7 +268,7 @@
           break;
     }
   } 
- 
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_put_request( $resource ) {
     respond_not_implemented();
@@ -301,7 +303,63 @@
   } 
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  // For hosts that filter HTTP DELETE, PUT at the Apache
+  // server level for security reasons.
+  //
+  // Returns 'delete', 'put', 'patch' if this is a work-
+  // around, else returns false. (If false, should handle
+  // normally.)
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function is_http_workaround( $resource, $method ) {
+
+    // Method must be POST
+    if ( $method != 'POST' ) {
+      return false;
+    }
+
+    $type = $resource[0];
+    if ( $type == 'delete' || $type == 'put' ) {
+      return $type;
+    }
+
+    return false;
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  // For hosts that filter HTTP DELETE, PUT at the Apache
+  // server level for security reasons.
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function  handle_workaround_request( $resource ) {
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // The only difference between "workaround" request and
+    // "normal" request is that the workaround has the
+    // HTTP verb at the front of the path. 
+    //
+    // To convert to normal request, just shift it off.
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    $verb  = array_shift( $resource );
+
+    switch( $verb ) {
+      case "delete":
+        handle_delete_request( $resource );
+        
+      case "put":
+        handle_put_request( $resource );
+
+      default:
+        respond_bad_request();
+    }
+
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - -  
   function handle_request( $resource, $method ) { 
+
+    if ( is_http_workaround( $resource, $method ) ) {
+      handle_workaround_request( $resource );
+    }    
+
     switch ( $method ) {
       case "POST":
           handle_post_request( $resource );
