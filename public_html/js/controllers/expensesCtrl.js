@@ -51,7 +51,7 @@ var ExpensesController = function($scope, $http, $window, ExpensesService, Categ
 
   //
   $scope.deleteExpense = function(id) {
-    var rm = confirm("Are you sure you want to delete this? (Cannot be undone.)");
+    var rm = confirm("Really delete this expense? (Cannot be undone.)");
     if (rm == true) {
       ExpensesService.deleteExpense(id, deleteExpenseCallback);
     }
