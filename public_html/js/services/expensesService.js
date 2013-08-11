@@ -24,7 +24,12 @@
         $http.delete('/api/expenses/' + id).success(function(response) {
           callback(response);
         }).error(function() {
-          alert('There was an error');
+          // Try workaround, DELETE HTTP request might be filtered by server
+          $http.post('/api/delete/expenses/' + id).success(function(response) { 
+            callback(response);
+          }).error(function() {
+            alert('There was an error');
+          });
         });
       }
     };
