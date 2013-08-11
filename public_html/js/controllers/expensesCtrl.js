@@ -19,6 +19,12 @@ var ExpensesController = function($scope, $http, $window, ExpensesService, Categ
     $scope.reset(); 
   }
 
+  // 
+  function deleteExpenseCallback(response) {
+    $scope.reset(); 
+  }
+
+
   //
   $scope.timeAgo = function(datetime) {
     return moment(datetime, "YYYY-MM-DD hh:mm:ss").calendar();
@@ -47,8 +53,7 @@ var ExpensesController = function($scope, $http, $window, ExpensesService, Categ
   $scope.deleteExpense = function(id) {
     var rm = confirm("Are you sure you want to delete this? (Cannot be undone.)");
     if (rm == true) {
-      ExpensesService.deleteExpense(id);
-      $scope.reset();
+      ExpensesService.deleteExpense(id, deleteExpenseCallback);
     }
   }
 
