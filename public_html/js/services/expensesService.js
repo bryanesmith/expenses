@@ -18,6 +18,14 @@
         }).error(function() {
           alert('There was an error');
         });
+      },
+
+      deleteExpense: function(id, callback) {
+        $http.delete('/api/expenses/' + id).success(function(response) {
+          callback(response);
+        }).error(function() {
+          alert('There was an error');
+        });
       }
     };
   }]);

@@ -43,6 +43,16 @@ var ExpensesController = function($scope, $http, $window, ExpensesService, Categ
     ExpensesService.addExpense($scope.expense, addExpenseCallback);
   };
 
+  //
+  $scope.deleteExpense = function(id) {
+    var rm = confirm("Are you sure you want to delete this? (Cannot be undone.)");
+    if (rm == true) {
+      ExpensesService.deleteExpense(id);
+      $scope.reset();
+    }
+  }
+
+  //
   $scope.setDate = function(date) {
     $scope.expense.date = date;
   }

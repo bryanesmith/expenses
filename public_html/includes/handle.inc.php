@@ -273,8 +273,31 @@
   } 
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_delete_expense( $id ) {
+    try {    
+      $sql = "DELETE FROM `expenses` WHERE `id` = ?";
+      $dbh = get_dbh();
+      $sth = $dbh->prepare( $sql );
+      $sth->execute( array($id) );
+    } catch ( Exception $e ) {
+      respond_bad_request();
+    }
+
+    respond_json( $id ); 
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_delete_request( $resource ) {
-    respond_not_implemented();
+    $type = $resource[0];
+    $id = $resource[1];
+    switch ( $type ) {
+      case 'expenses':
+          handle_delete_expense( $id );
+          break;
+      case 'categories':
+          respond_not_implemented();
+          break;
+    }
   } 
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 

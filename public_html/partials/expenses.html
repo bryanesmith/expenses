@@ -66,7 +66,7 @@
       <td>{{getExpense( expense.category_id )}}</td>
       <td>{{expense.description}}</td>
       <td>${{expense.cost}}</td>
-      <td class="action"><a href="#" onclick="return Library.notImplemented()"><i class="icon-edit" data-toggle="tooltip" title="Edit this expense"></i></a> <a href="#" onclick="return Library.notImplemented()"><i class="icon-remove" data-toggle="tooltip" title="Delete this expense"></i></a></td>
+      <td class="action"><a href="#" onclick="return Library.notImplemented()"><i class="icon-edit" data-toggle="tooltip" title="Edit this expense"></i></a> <a href="" data-ng-click="deleteExpense(expense.id)"><i class="icon-remove" data-toggle="tooltip" title="Delete this expense"></i></a></td>
     </tr>
   </table>
 </div> <!-- .span6 -->
