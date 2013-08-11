@@ -116,37 +116,60 @@
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function verify_request() {
-    global $types;
 
-    $resource = get_req_resource();
+    /**
+     * Potential request formats:
+     *  1. /{resource}
+     *  2. /{resource}/{id}
+     *  3. /summaries/{period}
+     *  4. /{action}/{resource}
+     *  5. /{action}/{resource}/{id}
+     *
+     * Where:
+     *  - {resource}: expenses, categories
+     *  - {id}: numeric
+     *  - {period}: daily
+     *  - {action}: delete, put
+     */
+    
+    // TODO: Implement
+    return true;
+  }
 
-    # CHECK: Should have 1 or 2 parts
-    $count = count( $resource );
-    switch ( $count ) {
-
-      case 1: # nothing
-        break;
-
-      # CHECK: If second argument, must be numeric
-      case 2:
-        # NOTE: /summaries/daily violates this check
-#        $id = $resource[1];
-#        if (! is_numeric( $id ) ) {
-#          respond_bad_request();
-#        }
-        break;
-
-      default:
-        respond_bad_request();
-    }
-
-    # CHECK: Recognized part
-    $type = $resource[0];
-    if ( ! in_array( $type, $types ) ) {
-      respond_bad_request(); 
-    }
-
-  } # verify_request
-
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  // Too many edge cases for verifying requests like this...
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+//  function verify_request() {
+//    global $types;
+//
+//    $resource = get_req_resource();
+//
+//    # CHECK: Should have 1 or 2 parts
+//    $count = count( $resource );
+//    switch ( $count ) {
+//
+//      case 1: # nothing
+//        break;
+//
+//      # CHECK: If second argument, must be numeric
+//      case 2:
+//        # NOTE: /summaries/daily violates this check
+//#        $id = $resource[1];
+//#        if (! is_numeric( $id ) ) {
+//#          respond_bad_request();
+//#        }
+//        break;
+//
+//      default:
+//        respond_bad_request();
+//    }
+//
+//    # CHECK: Recognized part
+//    $type = $resource[0];
+//    if ( ! in_array( $type, $types ) ) {
+//      respond_bad_request(); 
+//    }
+//
+//  } # verify_request
 
 ?>
