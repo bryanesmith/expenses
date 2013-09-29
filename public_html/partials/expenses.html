@@ -53,13 +53,16 @@
 
 <!--Body content-->
 <div class="span6">
+
   <!-- TODO: separate partial or custom directive -->
-  <ul class="pagination" data-ng-show="count.pages.expenses > 0">
+  <div class="pagination" data-ng-show="count.pages.expenses > 0">
     <span class="desc">Page</span>
-    <li data-ng-repeat="page in expensePages()">
-      <a href="#/expenses/{{page}}" data-ng-class="{current: page == current.page}">{{page + 1}}</a>
-    </li>
-  </ul>
+    <select data-ng-model="selected.page" 
+            data-ng-change="goToPage()" 
+            data-ng-options="page+1 for page in expensePages()"
+            class="input-small"></select>
+  </div>
+
   <table class="table table-striped">
     <tr>
       <th>Date</th>
@@ -78,12 +81,14 @@
   </table>
 
   <!-- TODO: separate partial or custom directive -->
-  <ul class="pagination" data-ng-show="count.pages.expenses > 0">
+  <div class="pagination" data-ng-show="count.pages.expenses > 0">
     <span class="desc">Page</span>
-    <li data-ng-repeat="page in expensePages()">
-      <a href="#/expenses/{{page}}" data-ng-class="{current: page == current.page}">{{page + 1}}</a>
-    </li>
-  </ul>
+    <select data-ng-model="selected.page" 
+            data-ng-change="goToPage()" 
+            data-ng-options="page+1 for page in expensePages()"
+            class="input-small"></select>
+  </div>
+  
 </div> <!-- .span6 -->
 
 <div class="span3">

@@ -1,10 +1,14 @@
 // Controller
-var ExpensesController = function($scope, $http, $window, $routeParams, ExpensesService, CategoriesService, SummariesService) {
+var ExpensesController = function($scope, $http, $window, $location, $routeParams, ExpensesService, CategoriesService, SummariesService) {
 
   $scope.expensesData   = {};
   $scope.categoriesData = {};
+  var page = parseInt( $routeParams.page );
   $scope.current = {
-    page: $routeParams.page
+    page: page
+  };
+  $scope.selected = {
+    page: page
   };
   $scope.count = {
     expenses: 0,
@@ -16,6 +20,11 @@ var ExpensesController = function($scope, $http, $window, $routeParams, Expenses
   //
   $scope.timeAgo = function(datetime) {
     return moment(datetime, "YYYY-MM-DD hh:mm:ss").calendar();
+  }
+
+  //
+  $scope.goToPage = function() {
+    $location.path( '/expenses/' + $scope.selected.page );
   }
 
   // If five pages, then returns [ 0, 1, ..., 4 ]
