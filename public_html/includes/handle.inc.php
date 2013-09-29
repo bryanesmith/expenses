@@ -52,7 +52,7 @@
 #      $sql = "SELECT * FROM `expenses` LIMIT ?, ?";
 #      $args = array( $offset, $page_size);
      
-      $sql = "SELECT * FROM `expenses` LIMIT $offset, $page_size";
+      $sql = "SELECT * FROM `expenses` ORDER BY `date` DESC LIMIT $offset, $page_size";
       $args = array();
       handle_list_json( $sql, $args ); 
     } else {
