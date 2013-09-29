@@ -40,7 +40,6 @@
         text-align: right;
         padding: 0;
         height: 180px;
-        background-image: url(/images/background.2.png);
         margin-bottom: 10px;
       }
       .hero-unit h1 {
@@ -102,6 +101,14 @@
         color: #222;
       }
     </style>
+    <script>
+      $(function() {
+        // Random background image for hero unit
+        var max = 2;
+        var random = Math.ceil(Math.random() * max);
+        $('.hero-unit').css('background-image', 'url(/images/background.'+random+'.png)');
+      });
+    </script>
   </head>
   <body>
     <div class="hero-unit">
