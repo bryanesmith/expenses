@@ -72,7 +72,7 @@ var ExpensesController = function($scope, $http, $window, ExpensesService, Categ
     $scope.setDate( date );
 
     // Get expenses
-    ExpensesService.getExpenses(getExpensesCallback); 
+    ExpensesService.getExpenses(0, getExpensesCallback); 
 
     // Get categories
     CategoriesService.getCategories(getCategoriesCallback);

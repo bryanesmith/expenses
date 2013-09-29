@@ -6,8 +6,14 @@
   services.factory('ExpensesService', ['$http', function ($http) {
     return {
 
-      getExpenses: function(callback) {
+      getAllExpenses: function(callback) {
         $http.get("/api/expenses").success(function(response){
+          callback(response);
+        });
+      },
+
+      getExpenses: function(page, callback) {
+        $http.get("/api.php?path=expenses&page=" + page).success(function(response){
           callback(response);
         });
       },
