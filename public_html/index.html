@@ -107,7 +107,6 @@
         // Select background image based on day of month, modulus number of images.
         var max = 2;
         var dayOfMonth = new Date().getDate();
-        dayOfMonth++;
         var idx = ( dayOfMonth % max );
         $('.hero-unit').css('background-image', 'url(/images/background.'+idx+'.png)');
       });
