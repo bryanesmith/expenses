@@ -18,6 +18,6 @@
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   // Go!
   verify_request();
-  handle_request( get_req_resource(), get_req_method() );
+  handle_request( get_req_method(), get_req_resource(), get_req_params() );
 
 ?>

@@ -87,6 +87,22 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  $_req_params = NULL;
+  function get_req_params() {
+    global $_req_params;
+    if ( ! isset( $_req_params ) ) {
+      $_req_params = [];
+      foreach( $_GET as $key => $val ) {
+        if ( $key != 'path' ) {
+          $_req_params[$key] = $val;
+        }
+      }
+    }
+  
+    return $_req_params;
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   $_req_resource = NULL;
   function get_req_resource() {
     global $_req_resource;
@@ -98,8 +114,6 @@
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function get_req_path() {
-    var_dump_stderr("DEBUG");
-    var_dump_stderr( $_GET );
     return $_GET["path"];
   }
 

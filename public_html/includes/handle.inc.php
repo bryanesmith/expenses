@@ -41,10 +41,25 @@
 
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  function handle_list_expenses() {
-    $sql = "SELECT * FROM `expenses`";
-    $args = array();
-    handle_list_json( $sql, $args ); 
+  function handle_list_expenses( $params ) {
+    $page_size = 50;
+
+    if ( array_key_exists( 'page', $params ) ) {
+      $page = intval( $params['page'] );
+      $offset = $page * $page_size;
+
+      # See: http://stackoverflow.com/a/16868108 
+#      $sql = "SELECT * FROM `expenses` LIMIT ?, ?";
+#      $args = array( $offset, $page_size);
+     
+      $sql = "SELECT * FROM `expenses` LIMIT $offset, $page_size";
+      $args = array();
+      handle_list_json( $sql, $args ); 
+    } else {
+      $sql = "SELECT * FROM `expenses`";
+      $args = array();
+      handle_list_json( $sql, $args ); 
+    }
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -225,14 +240,15 @@
     }
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  function handle_get_request( $resource ) {
+  function handle_get_request( $resource, $params ) {
     $type = $resource[0];
     $count = count( $resource );
+
     switch ( $type ) {
 
       case 'expenses':
           if ( $count == 1 ) {
-            handle_list_expenses();
+            handle_list_expenses( $params );
           } else if ( $count == 2 ) {
             handle_get_expense( $resource[1] );
           }
@@ -354,7 +370,7 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-  function handle_request( $resource, $method ) { 
+  function handle_request( $method, $resource, $params ) { 
 
     if ( is_http_workaround( $resource, $method ) ) {
       handle_workaround_request( $resource );
@@ -365,7 +381,7 @@
           handle_post_request( $resource );
           break;
       case "GET":
-          handle_get_request( $resource );
+          handle_get_request( $resource, $params );
           break;
       case "PUT":
           handle_put_request( $resource );
