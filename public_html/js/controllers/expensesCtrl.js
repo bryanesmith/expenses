@@ -1,8 +1,9 @@
 // Controller
-var ExpensesController = function($scope, $http, $window, ExpensesService, CategoriesService, SummariesService) {
+var ExpensesController = function($scope, $http, $window, $routeParams, ExpensesService, CategoriesService, SummariesService) {
 
   $scope.expensesData   = {};
   $scope.categoriesData = {};
+  $scope.page = $routeParams.page;
 
   // 
   function getExpensesCallback( data ) {
@@ -72,7 +73,7 @@ var ExpensesController = function($scope, $http, $window, ExpensesService, Categ
     $scope.setDate( date );
 
     // Get expenses
-    ExpensesService.getExpenses(0, getExpensesCallback); 
+    ExpensesService.getExpenses($scope.page, getExpensesCallback); 
 
     // Get categories
     CategoriesService.getCategories(getCategoriesCallback);
