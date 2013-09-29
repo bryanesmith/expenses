@@ -10,7 +10,7 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  function handle_get_json( $sql, $args ) {
+  function handle_get_json( $sql, $args = array() ) {
 
     $result = fetch( $sql, $args );
 
@@ -59,6 +59,22 @@
       $sql = "SELECT * FROM `expenses`";
       $args = array();
       handle_list_json( $sql, $args ); 
+    }
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_count_expenses( $which ) {
+    switch ($which ) {
+        case 'expenses':
+            $sql = "SELECT count(*) AS expenses FROM `expenses`";
+            handle_get_json( $sql ); 
+            break;
+        case 'categories':
+            $sql = "SELECT count(*) AS categories FROM `categories`";
+            handle_get_json( $sql ); 
+            break;
+        default:
+            respond_bad_request();
     }
   }
 
@@ -252,6 +268,10 @@
           } else if ( $count == 2 ) {
             handle_get_expense( $resource[1] );
           }
+          break;
+
+      case 'count':
+          handle_count_expenses( $resource[1] );
           break;
 
       case 'categories':
