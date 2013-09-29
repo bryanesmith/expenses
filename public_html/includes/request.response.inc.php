@@ -91,7 +91,7 @@
   function get_req_params() {
     global $_req_params;
     if ( ! isset( $_req_params ) ) {
-      $_req_params = [];
+      $_req_params = array(); 
       foreach( $_GET as $key => $val ) {
         if ( $key != 'path' ) {
           $_req_params[$key] = $val;
