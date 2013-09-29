@@ -3,32 +3,28 @@ var ExpensesController = function($scope, $http, $window, $routeParams, Expenses
 
   $scope.expensesData   = {};
   $scope.categoriesData = {};
-  $scope.page = $routeParams.page;
-
-  // 
-  function getExpensesCallback( data ) {
-    $scope.expensesData = data; 
-  }
-
-  // 
-  function getCategoriesCallback( data ) {
-    $scope.categoriesData = data;
-  }
-
-  // 
-  function addExpenseCallback(response) {
-    $scope.reset(); 
-  }
-
-  // 
-  function deleteExpenseCallback(response) {
-    $scope.reset(); 
-  }
-
+  $scope.current = {
+    page: $routeParams.page
+  };
+  $scope.count = {
+    expenses: 0,
+    pages: {
+      expenses: 0
+    }
+  };
 
   //
   $scope.timeAgo = function(datetime) {
     return moment(datetime, "YYYY-MM-DD hh:mm:ss").calendar();
+  }
+
+  // If five pages, then returns [ 0, 1, ..., 4 ]
+  $scope.expensePages = function() {
+    var pages = [];
+    for(var i=0; i<$scope.count.pages.expenses; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
   // 
@@ -47,14 +43,18 @@ var ExpensesController = function($scope, $http, $window, $routeParams, Expenses
 
   //
   $scope.addExpense = function() {
-    ExpensesService.addExpense($scope.expense, addExpenseCallback);
+    ExpensesService.addExpense($scope.expense, function() { 
+      $scope.reset(); 
+    });
   };
 
   //
   $scope.deleteExpense = function(id) {
     var rm = confirm("Really delete this expense? (Cannot be undone.)");
     if (rm == true) {
-      ExpensesService.deleteExpense(id, deleteExpenseCallback);
+      ExpensesService.deleteExpense(id, function() {
+        $scope.reset(); 
+      });
     }
   }
 
@@ -73,10 +73,25 @@ var ExpensesController = function($scope, $http, $window, $routeParams, Expenses
     $scope.setDate( date );
 
     // Get expenses
-    ExpensesService.getExpenses($scope.page, getExpensesCallback); 
+    ExpensesService.getExpenses($scope.current.page, function( data ) {
+      $scope.expensesData = data;    
+    }); 
+
+    ExpensesService.getExpenseCount(function( data ) {
+
+      var count = parseInt( data.expenses );
+      $scope.count.expenses = count;    
+
+      // TODO: parameterize or set somewhere so shared with server-side logic
+      var page_size = 50;
+      var pages = Math.ceil( count / page_size );
+      $scope.count.pages.expenses = pages;
+    });
 
     // Get categories
-    CategoriesService.getCategories(getCategoriesCallback);
+    CategoriesService.getCategories(function(data) {
+      $scope.categoriesData = data;
+    });
 
     // Get daily summaries
     SummariesService.getDailySummaries(DailyGraph.update);

@@ -18,6 +18,12 @@
         });
       },
 
+      getExpenseCount: function(callback) {
+        $http.get("/api/count/expenses").success(function(response){
+          callback(response);
+        });
+      },
+
       addExpense: function(expense, callback) {
         $http.post('/api/expenses', expense).success(function(response) {
           callback(response);

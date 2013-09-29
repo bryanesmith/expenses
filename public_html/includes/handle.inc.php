@@ -42,6 +42,8 @@
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_list_expenses( $params ) {
+
+    // TODO: parameterize or set somewhere so shared with client-side logic
     $page_size = 50;
 
     if ( array_key_exists( 'page', $params ) ) {

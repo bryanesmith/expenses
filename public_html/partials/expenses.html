@@ -53,6 +53,13 @@
 
 <!--Body content-->
 <div class="span6">
+  <!-- TODO: separate partial or custom directive -->
+  <ul class="pagination" data-ng-show="count.pages.expenses > 0">
+    <span class="desc">Page</span>
+    <li data-ng-repeat="page in expensePages()">
+      <a href="#/expenses/{{page}}" data-ng-class="{current: page == current.page}">{{page + 1}}</a>
+    </li>
+  </ul>
   <table class="table table-striped">
     <tr>
       <th>Date</th>
@@ -69,6 +76,14 @@
       <td class="action"><a href="#" onclick="return Library.notImplemented()"><i class="icon-edit" data-toggle="tooltip" title="Edit this expense"></i></a> <a href="" data-ng-click="deleteExpense(expense.id)"><i class="icon-remove" data-toggle="tooltip" title="Delete this expense"></i></a></td>
     </tr>
   </table>
+
+  <!-- TODO: separate partial or custom directive -->
+  <ul class="pagination" data-ng-show="count.pages.expenses > 0">
+    <span class="desc">Page</span>
+    <li data-ng-repeat="page in expensePages()">
+      <a href="#/expenses/{{page}}" data-ng-class="{current: page == current.page}">{{page + 1}}</a>
+    </li>
+  </ul>
 </div> <!-- .span6 -->
 
 <div class="span3">
