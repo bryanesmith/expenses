@@ -103,10 +103,11 @@
     </style>
     <script>
       $(function() {
-        // Random background image for hero unit
+        // Select background image based on day of month, modulus number of images.
         var max = 2;
-        var random = Math.ceil(Math.random() * max);
-        $('.hero-unit').css('background-image', 'url(/images/background.'+random+'.png)');
+        var dayOfMonth = new Date().getDate();
+        var idx = ( dayOfMonth % max );
+        $('.hero-unit').css('background-image', 'url(/images/background.'+idx+'.png)');
       });
     </script>
   </head>
