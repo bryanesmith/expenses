@@ -23,13 +23,25 @@
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_put_json( $sql, $args, $resource ) {
+    handle_execute_json( $sql, $args, $resource );
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_post_json( $sql, $args, $resource ) {
+    handle_execute_json( $sql, $args, $resource );
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_execute_json( $sql, $args, $resource ) {
 
     try {    
       $dbh = get_dbh();
       $sth = $dbh->prepare( $sql );
       $sth->execute($args);
     } catch ( Exception $e ) {
+      error_log( "Error while trying to execute SQL statement" );  
+      var_dump_stderr( $e );
       respond_bad_request();
     }
 
@@ -105,7 +117,10 @@
   function convertToMySqlDate( $dateStr ) {
     // Convert MM/DD/YYYY -> YYYY-MM-DD 0000:00:00
     $parts = preg_split("/\//", $dateStr );
-    if ( count($parts) != 3 ) {
+    $count = count( $parts );
+    $expected = 3;
+    if ( $count != $expected ) {
+      error_log( "Error while trying to covert to mysql date: expected $expected, but found $count (for $dateStr)" );  
       respond_bad_request();
     }
 
@@ -308,8 +323,30 @@
   } 
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  function handle_put_expense( $id ) {
+    $expense = get_json_decoded_request_payload(); 
+
+    // Uncomment when need convert YYYY/MM/DD -> YYYY-MM-DD 00:00:00
+    //$date = convertToMySqlDate($expense['date']);
+    $date = $expense['date'];
+    $sql = "UPDATE `expenses` SET `date`=?, `description`=?, `cost`=?, `category_id`=? WHERE `id`=?";
+    $args = array( $date , $expense['description'], $expense['cost'], $expense['category_id'], $expense['id'] );
+
+    handle_put_json( $sql, $args, $expense );
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   function handle_put_request( $resource ) {
-    respond_not_implemented();
+    $type = $resource[0];
+    $id = $resource[1];
+    switch ( $type ) {
+      case 'expenses':
+          handle_put_expense( $id ); 
+          break;
+      case 'categories':
+          respond_not_implemented();
+          break;
+    }
   } 
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -386,6 +423,7 @@
         handle_put_request( $resource );
 
       default:
+        error_log( "Unrecognized verb: $verb" );
         respond_bad_request();
     }
 
@@ -406,7 +444,7 @@
           handle_get_request( $resource, $params );
           break;
       case "PUT":
-          handle_put_request( $resource );
+          handle_put_request(  $resource );
           break;
       case "DELETE":
           handle_delete_request( $resource );

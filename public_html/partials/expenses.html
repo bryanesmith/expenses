@@ -54,6 +54,7 @@
 <!--Body content-->
 <div class="span6">
 
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
   <!-- TODO: separate partial or custom directive -->
   <div class="pagination" data-ng-show="count.pages.expenses > 0">
     <span class="desc">Page</span>
@@ -63,6 +64,55 @@
             class="input-small"></select>
   </div>
 
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+  <!-- Modal dialog for editing expense -->
+  <div id="edit-expense" class="modal hide fade">
+    <form data-ng-submit="editExpense()">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Edit expense</h3>
+      </div>
+      <div class="modal-body">
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="inputDate">Date</label>
+            <div class="controls">
+              <input class="span12" type="text" id="inputDate" data-ng-model="edit.expense.date">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="selectCategory">Category</label>
+            <div class="controls">
+              <select data-ng-model="edit.expense.category_id" 
+                      data-ng-options="category.id as category.category for category in categoriesData"></select>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputDescription">Description</label>
+            <div class="controls">
+              <textarea class="span12" id="inputDescription" data-ng-model="edit.expense.description"></textarea>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputPrice">Price</label>
+            <div class="controls">
+              <div class="input-prepend">
+                <span class="add-on">$</span>
+                <input type="text" id="inputPrice" placeholder="price" data-ng-model="edit.expense.cost">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary" type="submit">Save changes</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+  <!-- List of expenses -->
   <table class="table table-striped">
     <tr>
       <th>Date</th>
@@ -76,10 +126,14 @@
       <td>{{getExpense( expense.category_id )}}</td>
       <td>{{expense.description}}</td>
       <td>${{expense.cost}}</td>
-      <td class="action"><a href="#" onclick="return Library.notImplemented()"><i class="icon-edit" data-toggle="tooltip" title="Edit this expense"></i></a> <a href="" data-ng-click="deleteExpense(expense.id)"><i class="icon-remove" data-toggle="tooltip" title="Delete this expense"></i></a></td>
+      <td class="action">
+        <a href="#edit-expense" data-ng-click="setEditExpense(expense)" data-toggle="modal"><i class="icon-edit" data-toggle="tooltip" title="Edit this expense"></i></a> 
+        <a href="" data-ng-click="deleteExpense(expense.id)"><i class="icon-remove" data-toggle="tooltip" title="Delete this expense"></i></a>
+      </td>
     </tr>
   </table>
 
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
   <!-- TODO: separate partial or custom directive -->
   <div class="pagination" data-ng-show="count.pages.expenses > 0">
     <span class="desc">Page</span>

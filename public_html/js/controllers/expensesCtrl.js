@@ -5,17 +5,25 @@ var ExpensesController = function($scope, $http, $window, $location, $routeParam
   $scope.categoriesData = {};
   var page = parseInt( $routeParams.page );
   $scope.current = {
+    // Current page (e.g., 0, 1, 2... )
     page: page
   };
   $scope.selected = {
+    // Page selected by user to navigation to (e.g., 0, 1, 2... )
     page: page
   };
   $scope.count = {
+    // Total number of expenses
     expenses: 0,
     pages: {
+      // Total expenses page count
       expenses: 0
     }
   };
+  $scope.edit = {
+    // Currently edited expense
+    expense: {}
+  }
 
   //
   $scope.timeAgo = function(datetime) {
@@ -58,6 +66,14 @@ var ExpensesController = function($scope, $http, $window, $location, $routeParam
   };
 
   //
+  $scope.editExpense = function() {
+    ExpensesService.editExpense($scope.edit.expense, $scope.edit.expense.id, function() { 
+      $('#edit-expense').modal('hide');
+      $scope.reset(); 
+    });
+  };
+
+  //
   $scope.deleteExpense = function(id) {
     var rm = confirm("Really delete this expense? (Cannot be undone.)");
     if (rm == true) {
@@ -65,6 +81,11 @@ var ExpensesController = function($scope, $http, $window, $location, $routeParam
         $scope.reset(); 
       });
     }
+  }
+
+  //
+  $scope.setEditExpense = function( expense ) {
+    $scope.edit.expense = expense;
   }
 
   //

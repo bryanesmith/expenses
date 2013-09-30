@@ -32,6 +32,19 @@
         });
       },
 
+      editExpense: function(expense, id, callback) {
+        $http.put('/api/expenses/' + id, expense).success(function(response) {
+          callback(response);
+        }).error(function() {
+          // Try workaround, PUT HTTP request might be filtered by server
+          $http.post('/api/put/expenses/' + id, expense).success(function(response) { 
+            callback(response);
+          }).error(function() {
+            alert('There was an error');
+          });
+        });
+      },
+
       deleteExpense: function(id, callback) {
         $http.delete('/api/expenses/' + id).success(function(response) {
           callback(response);
