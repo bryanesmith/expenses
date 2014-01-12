@@ -7,7 +7,7 @@
     return {
 
       getDailySummaries: function(callback) {
-        $http.get("/api/summaries/daily").success(function(response){
+        $http.get("/http-api/summaries/daily").success(function(response){
           callback(response);
         });
       }

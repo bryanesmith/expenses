@@ -7,7 +7,7 @@
     return {
 
       getCategories: function(callback) {
-        $http.get("/api/categories").success(function(response){
+        $http.get("/http-api/categories").success(function(response){
           callback(response);
         });
       }

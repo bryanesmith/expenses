@@ -7,7 +7,7 @@
     return {
 
       getAllExpenses: function(callback) {
-        $http.get("/api/expenses").success(function(response){
+        $http.get("/http-api/expenses").success(function(response){
           callback(response);
         });
       },
@@ -19,13 +19,13 @@
       },
 
       getExpenseCount: function(callback) {
-        $http.get("/api/count/expenses").success(function(response){
+        $http.get("/http-api/count/expenses").success(function(response){
           callback(response);
         });
       },
 
       addExpense: function(expense, callback) {
-        $http.post('/api/expenses', expense).success(function(response) {
+        $http.post('/http-api/expenses', expense).success(function(response) {
           callback(response);
         }).error(function() {
           alert('There was an error');
@@ -33,11 +33,11 @@
       },
 
       editExpense: function(expense, id, callback) {
-        $http.put('/api/expenses/' + id, expense).success(function(response) {
+        $http.put('/http-api/expenses/' + id, expense).success(function(response) {
           callback(response);
         }).error(function() {
           // Try workaround, PUT HTTP request might be filtered by server
-          $http.post('/api/put/expenses/' + id, expense).success(function(response) { 
+          $http.post('/http-api/put/expenses/' + id, expense).success(function(response) { 
             callback(response);
           }).error(function() {
             alert('There was an error');
@@ -46,11 +46,11 @@
       },
 
       deleteExpense: function(id, callback) {
-        $http.delete('/api/expenses/' + id).success(function(response) {
+        $http.delete('/http-api/expenses/' + id).success(function(response) {
           callback(response);
         }).error(function() {
           // Try workaround, DELETE HTTP request might be filtered by server
-          $http.post('/api/delete/expenses/' + id).success(function(response) { 
+          $http.post('/http-api/delete/expenses/' + id).success(function(response) { 
             callback(response);
           }).error(function() {
             alert('There was an error');

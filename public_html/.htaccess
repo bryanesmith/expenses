@@ -6,7 +6,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^foo\.(.*)$ /bar.$1 [PT]
 
 # If using 'path' query variable (which works for GET, POST, PUT, DELETE):
-RewriteRule ^api/(.*)$ api.php?path=$1 [L]
+RewriteRule ^http-api/(.*)$ /api.php?path=$1 [L]
 
 # If using $_SERVER['PATH_INFO']:
 #RewriteRule ^api/(.*)$ index.php/$1 [L]
