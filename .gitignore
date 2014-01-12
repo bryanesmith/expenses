@@ -7,3 +7,6 @@ private/expenses.ini
 # Any gedit backups
 *~
 
+# Any Vim files
+*.swp
+
