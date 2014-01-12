@@ -3,7 +3,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 # For testing
-RewriteRule ^/foo\.html$ /bar.html [PT]
+RewriteRule ^foo\.html$ /bar.html [PT]
 
 # If using 'path' query variable (which works for GET, POST, PUT, DELETE):
 RewriteRule ^api/(.*)$ api.php?path=$1 [L]
